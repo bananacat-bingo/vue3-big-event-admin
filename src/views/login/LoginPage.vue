@@ -99,6 +99,7 @@ watch(isRegister, () => {
         </el-form-item>
         <el-form-item prop="repassword">
           <el-input
+            @keyup.enter="register"
             v-model="formModel.repassword"
             :prefix-icon="Lock"
             type="password"
@@ -141,6 +142,7 @@ watch(isRegister, () => {
         </el-form-item>
         <el-form-item prop="password">
           <el-input
+            @keyup.enter="login"
             v-model="formModel.password"
             name="password"
             :prefix-icon="Lock"
