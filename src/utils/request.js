@@ -7,7 +7,7 @@ const baseURL = 'http://big-event-vue-api-t.itheima.net'
 
 const instance = axios.create({
   baseURL,
-  timeout: 5000
+  timeout: 10000
 })
 
 // 添加请求拦截器，请求发送前执行

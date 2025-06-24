@@ -1,7 +1,7 @@
 <script setup>
 import { User, Lock } from '@element-plus/icons-vue'
 import { ref, watch } from 'vue'
-import { userRegisterService, useLoginService } from '@/api/user'
+import { userRegisterService, userLoginService } from '@/api/user'
 import { useUserStore } from '@/stores'
 import router from '@/router'
 
@@ -53,7 +53,7 @@ const register = async () => {
 const userStore = useUserStore()
 const login = async () => {
   await form.value.validate()
-  const { token } = await useLoginService(formModel.value)
+  const { token } = await userLoginService(formModel.value)
   userStore.token = token
   ElMessage.success('登录成功')
   router.push('/')
