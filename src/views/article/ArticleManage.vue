@@ -3,7 +3,7 @@ import PageContainer from '@/components/PageContainer.vue'
 import ChannelSelect from './components/ChannelSelect.vue'
 import { Edit, Delete } from '@element-plus/icons-vue'
 import { ref } from 'vue'
-import { artGetListService } from '@/api/article'
+import { artDelService, artGetListService } from '@/api/article'
 import { formatTime } from '@/utils/format'
 import ArticleEdit from './components/ArticleEdit.vue'
 
@@ -50,8 +50,15 @@ const onEditArticle = (row) => {
 const onAddArticle = () => {
   articleEditRef.value.open({})
 }
-const onDeleteArticle = (row) => {
-  console.log(row)
+const onDeleteArticle = async (row) => {
+  await ElMessageBox.confirm('你确定要删除该文章吗', '温馨提示', {
+    type: 'warning',
+    confirmButtonText: '确认',
+    cancelButtonText: '取消'
+  })
+  await artDelService(row.id)
+  ElMessage.success('删除成功')
+  getArticleList()
 }
 const onSuccess = (type) => {
   if (type === 'add') {
@@ -117,6 +124,9 @@ const onSuccess = (type) => {
           ></el-button>
         </template>
       </el-table-column>
+      <template #empty>
+        <el-empty description="暂无数据"></el-empty>
+      </template>
     </el-table>
     <el-pagination
       v-model:current-page="params.pagenum"

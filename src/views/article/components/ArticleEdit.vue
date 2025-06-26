@@ -4,7 +4,13 @@ import ChannelSelect from './ChannelSelect.vue'
 import { Plus } from '@element-plus/icons-vue'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { artPublishService } from '@/api/article'
+import {
+  artEditService,
+  artGetDetailService,
+  artPublishService
+} from '@/api/article'
+import { baseURL } from '@/utils/request'
+import axios from 'axios'
 
 const visibleDrawer = ref(false)
 const defaultForm = {
@@ -54,7 +60,7 @@ const onContentBlur = () => {
   formRef.value && formRef.value.validateField('content')
 }
 const emit = defineEmits(['success'])
-const open = (row) => {
+const open = async (row) => {
   visibleDrawer.value = true
   formModel.value.id = row.id
   if (!row.id) {
@@ -65,7 +71,25 @@ const open = (row) => {
       editorRef.value.setHTML('')
     })
   } else {
-    console.log('编辑文章')
+    const res = await artGetDetailService(row.id)
+    formModel.value = res.data
+    imgUrl.value = baseURL + formModel.value.cover_img
+    const file = await imageUrlToFile(imgUrl.value, formModel.value.cover_img)
+    formModel.value.cover_img = file
+  }
+}
+async function imageUrlToFile(url, fileName) {
+  try {
+    const response = await axios.get(url, { responseType: 'arraybuffer' })
+    const imageData = response.data
+    const blob = new Blob([imageData], {
+      type: response.headers['content-type']
+    })
+    const file = new File([blob], fileName, { type: blob.type })
+    return file
+  } catch (error) {
+    console.error('将图片转换为File对象时发生错误:', error)
+    throw error
   }
 }
 const onSelectFile = (uploadFile) => {
@@ -86,7 +110,10 @@ const onPublish = async (state) => {
     visibleDrawer.value = false
     emit('success', 'add')
   } else {
-    console.log('草稿')
+    await artEditService(fd)
+    ElMessage.success('修改成功')
+    visibleDrawer.value = false
+    emit('success', 'edit')
   }
 }
 defineExpose({
@@ -137,7 +164,9 @@ defineExpose({
         </div>
       </el-form-item>
       <el-form-item>
-        <el-button @click="onPublish('已发布')" type="primary">发布</el-button>
+        <el-button @click="onPublish('已发布')" type="primary">{{
+          formModel.id ? '修改' : '发布'
+        }}</el-button>
         <el-button @click="onPublish('草稿')" type="info">草稿</el-button>
       </el-form-item>
     </el-form>
