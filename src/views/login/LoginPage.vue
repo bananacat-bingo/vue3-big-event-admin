@@ -15,7 +15,7 @@ const formModel = ref({
 const rules = {
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: 5, max: 10, message: '用户名必须是 5-10 位的字符', trigger: 'blur' }
+    { min: 5, max: 10, message: '用户名必须是 3-10 位的字符', trigger: 'blur' }
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },

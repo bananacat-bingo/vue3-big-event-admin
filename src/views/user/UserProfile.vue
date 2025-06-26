@@ -18,7 +18,7 @@ const form = ref({
 const rules = {
   nickname: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: 5, max: 10, message: '用户名必须是 5-10 位的字符', trigger: 'blur' }
+    { min: 5, max: 10, message: '用户名必须是 3-10 位的字符', trigger: 'blur' }
   ],
   email: [
     { required: true, message: '请输入用户邮箱', trigger: 'blur' },
