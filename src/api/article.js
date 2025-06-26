@@ -11,3 +11,10 @@ export const artDelChannelService = (id) =>
   request.delete('/my/cate/del', {
     params: { id }
   })
+
+export const artGetListService = (params) =>
+  request.get('/my/article/list', {
+    params
+  })
+
+export const artPublishService = (data) => request.post('/my/article/add', data)
