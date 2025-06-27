@@ -11,10 +11,15 @@ export const useUserStore = defineStore(
       const res = await userGetInfoService()
       user.value = res.data
     }
+    const setUser = () => {
+      token.value = ''
+      user.value = ''
+    }
     return {
       token,
       user,
-      getUser
+      getUser,
+      setUser
     }
   },
   {
